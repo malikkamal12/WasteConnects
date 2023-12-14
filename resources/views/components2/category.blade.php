@@ -1,11 +1,12 @@
 <!-- kategori untuk desktop -->
 <div class="desktop border-bottom">
-    <div class="d-flex flex-row ">
+    <div class="d-flex flex-row">
         <div class="p-2 h5 text-muted"><b>Kategori</b></div>
         <div class="p-2">
-            <a href="/" class="none mx-2">Semua({{$products_count}})</a>
+            <a href="/" class="none mx-2">Semua ({{ $categories->flatMap(function ($category) { return
+                $category->products; })->count() }})</a>
             @foreach ($categories as $category)
-            @if ($category->products()->has('category')->count() > 0)
+            @if ($category->products()->where('address_id', $address_current->id)->count() > 0)
             {{-- Ubah style untuk menandakan dimana category sekarang --}}
             @if (isset($category_current) && $category_current == $category)
             <a href="#" onclick="searchByCategory({{ $category->id }})" class="none mx-2 text-success">
@@ -22,6 +23,7 @@
     </div>
 </div>
 
+
 <!-- kategori Panel phone -->
 <div class="phone border-bottom">
     <div class="container-fluid bg-success phone">
@@ -30,7 +32,8 @@
 
     <div class="container-fluid scroll-container hide-scroll mt-3 phone">
         @foreach ($categories as $category)
-        @if ($category->products()->has('category')->count() > 0)
+        @if ($category->products()->where('address_id', $address_current->id)->count() > 0)
+
         {{-- Ubah style untuk menandakan dimana category sekarang --}}
         <div class="scroll-item col-sm">
             <a class="none text-success" href="#" onclick="searchByCategory({{ $category->id }})">

@@ -13,19 +13,39 @@ use Illuminate\Support\Facades\Redirect;
 
 class ProductController extends Controller
 {
+    // public function index(Request $request)
+    // {
+    //     // $products = Product::all();
+    //     $addresses = Address::all();
+
+    //     if ($request->session()->has('address_id_session')) {
+    //         $categories = Category::all();
+    //         // mendapatkan address_current dengan address_id_session
+    //         $address_current = Address::find($request->session()->get('address_id_session'));
+    //         $products = Product::where('address_id', $request->session()->get('address_id_session'))->get();
+    //         $products_count = Product::where('address_id', $request->session()->get('address_id_session'))->count();
+    //         return view('main', compact('products', 'categories', 'addresses', 'address_current', 'products_count'));
+    //     }
     public function index(Request $request)
     {
-        // $products = Product::all();
         $addresses = Address::all();
 
         if ($request->session()->has('address_id_session')) {
             $categories = Category::all();
-            // mendapatkan address_current dengan address_id_session
             $address_current = Address::find($request->session()->get('address_id_session'));
-            $products = Product::where('address_id', $request->session()->get('address_id_session'))->get();
-            $products_count = Product::where('address_id', $request->session()->get('address_id_session'))->count();
+            $addressId = $request->session()->get('address_id_session');
+
+            // Fetch products only for the selected address
+            $products = Product::where('address_id', $addressId)->get();
+
+            $products_count = Product::where('address_id', $addressId)->count();
+
+            // ... (other code)
+
             return view('main', compact('products', 'categories', 'addresses', 'address_current', 'products_count'));
         }
+
+
 
         return view('getuserAddress', compact('addresses'));
     }
